@@ -1,5 +1,6 @@
 package com.microgames.mgwebsite.web.security;
 
+import com.microgames.mgwebsite.web.security.AuthenticationHandlers; // Asegúrate que el import sea correcto
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -14,14 +15,18 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
+    private final AuthenticationHandlers authenticationHandlers;
 
-    public SecurityConfig(UserDetailsService userDetailsService) {
+    // Constructor con inyección
+    public SecurityConfig(UserDetailsService userDetailsService, 
+                          AuthenticationHandlers authenticationHandlers) {
         this.userDetailsService = userDetailsService;
+        this.authenticationHandlers = authenticationHandlers;
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12); // Más seguro
+        return new BCryptPasswordEncoder(12);
     }
 
     @Bean
@@ -41,8 +46,9 @@ public class SecurityConfig {
             )
             .formLogin(form -> form
                 .loginPage("/login")
+                .successHandler(authenticationHandlers)
+                .failureHandler(authenticationHandlers)
                 .defaultSuccessUrl("/home", true)
-                .failureUrl("/login?error=true")
                 .permitAll()
             )
             .logout(logout -> logout

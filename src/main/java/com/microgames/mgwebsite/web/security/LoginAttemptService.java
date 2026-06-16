@@ -1,6 +1,4 @@
 package com.microgames.mgwebsite.web.security;
-// src/main/java/com/microgames/mgwebsite/security/LoginAttemptService.java
-
 
 import com.microgames.mgwebsite.web.entities.LoginAttempt;
 import com.microgames.mgwebsite.web.repository.LoginAttemptRepository;
@@ -13,7 +11,7 @@ public class LoginAttemptService {
 
     private final LoginAttemptRepository loginAttemptRepository;
 
-    private static final int MAX_ATTEMPTS = 3;
+    private static final int MAX_ATTEMPTS = 3   ;
     private static final int LOCK_MINUTES = 15;
 
     public LoginAttemptService(LoginAttemptRepository loginAttemptRepository) {

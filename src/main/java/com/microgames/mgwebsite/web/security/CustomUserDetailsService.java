@@ -16,14 +16,24 @@ import java.util.Collections;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepository usuarioRepository;
+    private final UserRepository usuarioRepository; 
+    private final LoginAttemptService loginAttemptService;
 
-    public CustomUserDetailsService(UserRepository usuarioRepository) {
+    public CustomUserDetailsService(UserRepository usuarioRepository, 
+                                    LoginAttemptService loginAttemptService) {
         this.usuarioRepository = usuarioRepository;
+        this.loginAttemptService = loginAttemptService;
+
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+if (loginAttemptService.isBlocked(email)) {
+            throw new UsernameNotFoundException("Cuenta bloqueada temporalmente por múltiples intentos fallidos. Intente más tarde.");
+        }
+
+
         Userclient usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con email: " + email));
 
