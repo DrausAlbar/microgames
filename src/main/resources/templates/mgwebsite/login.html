@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/fr_microgames :: head}"></head>
+<header th:replace="~{fragments/fr_microgames :: header}"></header>
+
+<body>
+    <div class="sandbox">
+
+        <div class="box" style="padding-top: 20vh;">
+            <div class="center">
+                <div class="panelcenter" style="padding: 50px;">
+                    <div class="right">
+                        <div th:if="${param.error}" style="color:red;">Usuario o contraseña incorrectos</div>
+                        <div th:if="${param.logout}" style="color:green;">Sesión cerrada correctamente</div>
+                        <div th:if="${param.registered}" style="color:green;">Registro exitoso. Inicia sesión.</div>
+
+                        <form th:action="@{/login}" method="post" id="formlog">
+                            <div class="mb-3">
+                                <label for="email">Email:</label>
+                                <input type="email" id="email" name="username" required autofocus />
+                                <!-- name="username" es importante -->
+                            </div>
+                            <div>
+                                <label for="password">Contraseña:</label>
+                                <input type="password" id="password" name="password" required />
+                            </div>
+                            <div class="bar-bottom" style="padding-bottom: 20px;"></div>
+                            <div class="panelcenter">
+
+                                <a href="/fallenempire">
+                                    <div class="boton"> ▫️Registrarse</div>
+                                </a>
+
+                                <div class="boton" onclick="document.getElementById('formlog').submit()">▫️Iniciar Sesión
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<footer th:replace="~{fragments/fr_microgames ::footer}"></footer>
+
+</html>

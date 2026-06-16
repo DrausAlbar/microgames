@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/fr_microgames :: head}"></head>
+<body>
+    <div class="perfil-container">
+        <h1>Mi Perfil</h1>
+        
+
+
+        <a href="/home" class="btn">Volver al Inicio</a>
+        
+        <!-- Botón de Cerrar Sesión -->
+
+        <form th:action="@{/logout}" method="post" style="display: inline;">
+            <button type="submit" class="btn btn-logout">Cerrar Sesión</button>
+        </form>
+        
+    </div>
+
+
+    <div class="perfil-info">
+    <p><strong>Usuario:</strong> <span th:text="${profile.username}"></span></p>
+    <p><strong>Email:</strong> <span th:text="${profile.email}"></span></p>
+    <p><strong>Nombre:</strong> <span th:text="${profile.firsname}"></span></p>
+    <p><strong>Apellido:</strong> <span th:text="${profile.lastname}"></span></p>
+    <p><strong>Rol:</strong> <span th:text="${profile.rol}"></span></p>
+</div>
+
+
+</body>
+</html>

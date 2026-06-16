@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - MG Web</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .status-ok {
+            color: #00ff9d;
+        }
+
+        .status-error {
+            color: #ff4d4d;
+        }
+    </style>
+</head>
+
+<body class="bg-dark">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h3>Crear Cuenta</h3>
+                    </div>
+                    <div class="card-body">
+
+                        <form id="registerForm" th:action="@{/register}" method="post">
+                            <div class="mb-3">
+                                <label class="form-label">Nombre de Usuario</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="username" name="username" required>
+                                    <button class="btn btn-outline-info" type="button" id="checkBtn">
+                                        Verificar
+                                    </button>
+                                </div>
+                                <small id="usernameStatus" class="form-text"></small>
+                            </div>
+
+                            <!-- Otros campos -->
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <div class="input-group">
+                                    <input type="email" class="form-control" id="email" name="email" required />
+                                    <button class="btn btn-outline-info" type="button" id="checkEmailBtn">
+                                        Verificar
+                                    </button>
+                                    </div>
+                                    <small id="emailStatus" class="form-text"></small>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" name="password" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100" id="submitBtn" disabled>
+                                Registrarse
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Verificación de usuarios y emails-->
+    <script>
+        // === ELEMENTOS DEL FORMULARIO ===
+        const usernameInput = document.getElementById('username');
+        const checkBtn = document.getElementById('checkBtn');
+        const usernameStatus = document.getElementById('usernameStatus');
+
+        const emailInput = document.getElementById('email');
+        const checkEmailBtn = document.getElementById('checkEmailBtn');
+        const emailStatus = document.getElementById('emailStatus');
+
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Variables de estado
+        let usernameDisponible = false;
+        let emailDisponible = false;
+
+        // ========================
+        // VERIFICACIÓN DE USERNAME
+        // ========================
+        checkBtn.addEventListener('click', async () => {
+            const username = usernameInput.value.trim();
+
+            if (username.length < 3) {
+                usernameStatus.textContent = "El nombre debe tener al menos 3 caracteres";
+                usernameStatus.className = "form-text status-error";
+                return;
+            }
+
+            usernameStatus.textContent = "Comprobando...";
+            usernameStatus.className = "form-text";
+
+            try {
+                const response = await fetch(`/api/auth/check-username?username=${encodeURIComponent(username)}`);
+                const data = await response.json();
+
+                if (data.disponible) {
+                    usernameStatus.textContent = data.mensaje;
+                    usernameStatus.className = "form-text status-ok";
+                    usernameDisponible = true;
+                } else {
+                    usernameStatus.textContent = data.mensaje;
+                    usernameStatus.className = "form-text status-error";
+                    usernameDisponible = false;
+                }
+
+                actualizarBotonSubmit();
+            } catch (error) {
+                usernameStatus.textContent = "Error al conectar con el servidor";
+                usernameStatus.className = "form-text status-error";
+            }
+        });
+
+        // ========================
+        // VERIFICACIÓN DE EMAIL
+        // ========================
+        checkEmailBtn.addEventListener('click', async () => {
+            const email = emailInput.value.trim();
+
+            if (!email) {
+                emailStatus.textContent = "Por favor ingresa un email";
+                emailStatus.className = "form-text status-error";
+                return;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                emailStatus.textContent = "Por favor ingresa un email válido";
+                emailStatus.className = "form-text status-error";
+                return;
+            }
+
+            emailStatus.textContent = "Comprobando...";
+            emailStatus.className = "form-text";
+
+            try {
+                const response = await fetch(`/api/auth/check-email?email=${encodeURIComponent(email)}`);
+                const data = await response.json();
+
+                if (data.disponible) {
+                    emailStatus.textContent = data.mensaje;
+                    emailStatus.className = "form-text status-ok";
+                    emailDisponible = true;
+                } else {
+                    emailStatus.textContent = data.mensaje;
+                    emailStatus.className = "form-text status-error";
+                    emailDisponible = false;
+                }
+
+                actualizarBotonSubmit();
+            } catch (error) {
+                emailStatus.textContent = "Error al conectar con el servidor";
+                emailStatus.className = "form-text status-error";
+            }
+        });
+
+        // Función auxiliar para habilitar/deshabilitar el botón
+        function actualizarBotonSubmit() {
+            submitBtn.disabled = !(usernameDisponible && emailDisponible);
+        }
+
+        // Comprobar al perder el foco (opcional pero recomendado)
+        usernameInput.addEventListener('blur', () => {
+            if (usernameInput.value.trim().length >= 3) checkBtn.click();
+        });
+
+        emailInput.addEventListener('blur', () => {
+            if (emailInput.value.trim()) checkEmailBtn.click();
+        });
+    </script>
+    <!--Verificación de usuarios y emails-->
+</body>
+
+</html>
