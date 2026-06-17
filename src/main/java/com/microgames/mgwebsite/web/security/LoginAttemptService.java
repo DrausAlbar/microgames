@@ -5,7 +5,6 @@ import com.microgames.mgwebsite.web.repository.LoginAttemptRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 public class LoginAttemptService {
 
@@ -19,13 +18,14 @@ public class LoginAttemptService {
     }
 
     @Transactional
-    public void loginFailed(String username) {
-        String key = username.toLowerCase().trim();
+    public void loginFailed(String email) {
+        String key = email.toLowerCase().trim();
+        System.out.println("Login failed for email: " + key); // Debugging line
 
-        LoginAttempt attempt = loginAttemptRepository.findByUsername(key)
+        LoginAttempt attempt = loginAttemptRepository.findByEmail(key)
                 .orElseGet(() -> {
                     LoginAttempt newAttempt = new LoginAttempt();
-                    newAttempt.setUsername(key);
+                    newAttempt.setEmail(key);
                     return newAttempt;
                 });
 
@@ -34,9 +34,9 @@ public class LoginAttemptService {
     }
 
     @Transactional
-    public void loginSucceeded(String username) {
-        String key = username.toLowerCase().trim();
-        loginAttemptRepository.findByUsername(key)
+    public void loginSucceeded(String email) {
+        String key = email.toLowerCase().trim();
+        loginAttemptRepository.findByEmail(key)
                 .ifPresent(attempt -> {
                     attempt.reset();
                     loginAttemptRepository.save(attempt);
@@ -44,9 +44,9 @@ public class LoginAttemptService {
     }
 
     @Transactional(readOnly = true)
-    public boolean isBlocked(String username) {
-        String key = username.toLowerCase().trim();
-        return loginAttemptRepository.findByUsername(key)
+    public boolean isBlocked(String email) {
+        String key = email.toLowerCase().trim();
+        return loginAttemptRepository.findByEmail(key)
                 .map(LoginAttempt::isLocked)
                 .orElse(false);
     }

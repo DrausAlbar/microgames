@@ -26,20 +26,20 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String email = authentication.getName();           // Lo que viene del formulario
+        String email = authentication.getName().trim().toLowerCase();
         String password = (String) authentication.getCredentials();
 
-        // 1. Verificar si la cuenta está bloqueada
+        // 1. Verificar si está bloqueado
         if (loginAttemptService.isBlocked(email)) {
             throw new BadCredentialsException("Cuenta bloqueada temporalmente por múltiples intentos fallidos.");
         }
 
-        // 2. Cargar el usuario (aquí también se vuelve a chequear isBlocked)
+        // 2. Cargar usuario
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
         // 3. Verificar contraseña
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
-            loginAttemptService.loginFailed(email);   // ← Registro de intento fallido
+            loginAttemptService.loginFailed(email);          // ← Registro de fallo
             throw new BadCredentialsException("Email o contraseña incorrectos.");
         }
 
@@ -48,7 +48,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         return new UsernamePasswordAuthenticationToken(
                 userDetails,
-                null,  // No guardamos la contraseña en el token
+                null,
                 userDetails.getAuthorities()
         );
     }

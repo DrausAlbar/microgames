@@ -23,10 +23,10 @@ public class ProfileController {
     @GetMapping("/profile")
     public String mostrarPerfil(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
+        String email = auth.getName();
 
-        Userclient usuario = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado " + username));
+        Userclient usuario = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado " + email));
 
         // Convertir a DTO
         UserProfileDTO profile = new UserProfileDTO();

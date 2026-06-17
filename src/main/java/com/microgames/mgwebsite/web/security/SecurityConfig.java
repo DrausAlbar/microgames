@@ -18,7 +18,8 @@ public class SecurityConfig {
 
     // Constructor con inyección
     public SecurityConfig(UserDetailsService userDetailsService, 
-                          AuthenticationHandlers authenticationHandlers,LoginAttemptService loginAttemptService) {
+                          AuthenticationHandlers authenticationHandlers,
+                          LoginAttemptService loginAttemptService) {
         this.userDetailsService = userDetailsService;
         this.authenticationHandlers = authenticationHandlers;
         this.loginAttemptService = loginAttemptService;
@@ -49,6 +50,8 @@ public AuthenticationProvider authenticationProvider() {
             )
             .formLogin(form -> form
                 .loginPage("/login")
+                .usernameParameter("email")
+                .passwordParameter("password")
                 .successHandler(authenticationHandlers)
                 .failureHandler(authenticationHandlers)
                 .defaultSuccessUrl("/home", true)

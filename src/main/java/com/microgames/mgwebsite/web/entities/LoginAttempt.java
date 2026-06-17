@@ -1,4 +1,5 @@
 package com.microgames.mgwebsite.web.entities;
+
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -11,7 +12,7 @@ public class LoginAttempt {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String username;
+    private String email;                    // ← Usaremos solo esto
 
     @Column(nullable = false)
     private int attempts = 0;
@@ -23,49 +24,23 @@ public class LoginAttempt {
     private LocalDateTime lastAttempt = LocalDateTime.now();
 
     // Constructor vacío
-    public LoginAttempt() {
-    }
+    public LoginAttempt() {}
 
     // Getters y Setters
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getUsername() {
-        return username;
-    }
+    public int getAttempts() { return attempts; }
+    public void setAttempts(int attempts) { this.attempts = attempts; }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    public LocalDateTime getLockUntil() { return lockUntil; }
+    public void setLockUntil(LocalDateTime lockUntil) { this.lockUntil = lockUntil; }
 
-    public int getAttempts() {
-        return attempts;
-    }
-
-    public void setAttempts(int attempts) {
-        this.attempts = attempts;
-    }
-
-    public LocalDateTime getLockUntil() {
-        return lockUntil;
-    }
-
-    public void setLockUntil(LocalDateTime lockUntil) {
-        this.lockUntil = lockUntil;
-    }
-
-    public LocalDateTime getLastAttempt() {
-        return lastAttempt;
-    }
-
-    public void setLastAttempt(LocalDateTime lastAttempt) {
-        this.lastAttempt = lastAttempt;
-    }
+    public LocalDateTime getLastAttempt() { return lastAttempt; }
+    public void setLastAttempt(LocalDateTime lastAttempt) { this.lastAttempt = lastAttempt; }
 
     // Métodos de negocio
     public boolean isLocked() {
@@ -86,5 +61,4 @@ public class LoginAttempt {
         this.lockUntil = null;
         this.lastAttempt = LocalDateTime.now();
     }
-
 }

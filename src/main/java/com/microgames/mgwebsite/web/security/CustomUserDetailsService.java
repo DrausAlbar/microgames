@@ -15,12 +15,12 @@ import java.util.Collections;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepository usuarioRepository; 
+    private final UserRepository userRepository; 
     private final LoginAttemptService loginAttemptService;
 
-    public CustomUserDetailsService(UserRepository usuarioRepository, 
+    public CustomUserDetailsService(UserRepository userRepository, 
                                     LoginAttemptService loginAttemptService) {
-        this.usuarioRepository = usuarioRepository;
+        this.userRepository = userRepository;
         this.loginAttemptService = loginAttemptService;
 
     }
@@ -33,13 +33,13 @@ if (loginAttemptService.isBlocked(email)) {
         }
 
 
-        Userclient usuario = usuarioRepository.findByEmail(email)
+        Userclient usuario = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con email: " + email));
 
         GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + usuario.getRol());
 
         return new User(
-                usuario.getUsername(),           // ← Cambiado a email
+                  usuario.getEmail(),            // ← Cambiado a email
                 usuario.getPassword(),
                 usuario.isEnabled(),
                 true, true, true,
