@@ -1,6 +1,5 @@
 package com.microgames.mgwebsite.web.security;
 
-import com.microgames.mgwebsite.web.security.LoginAttemptService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,7 +9,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
-import java.time.LocalDateTime;   // Este import está bien, la alerta debería desaparecer
+
 
 @Component
 public class AuthenticationHandlers 

@@ -1,10 +1,8 @@
 package com.microgames.mgwebsite.web.security;
 
-import com.microgames.mgwebsite.web.security.AuthenticationHandlers; // Asegúrate que el import sea correcto
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,12 +14,14 @@ public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
     private final AuthenticationHandlers authenticationHandlers;
+    private final LoginAttemptService loginAttemptService;
 
     // Constructor con inyección
     public SecurityConfig(UserDetailsService userDetailsService, 
-                          AuthenticationHandlers authenticationHandlers) {
+                          AuthenticationHandlers authenticationHandlers,LoginAttemptService loginAttemptService) {
         this.userDetailsService = userDetailsService;
         this.authenticationHandlers = authenticationHandlers;
+        this.loginAttemptService = loginAttemptService;
     }
 
     @Bean
@@ -29,12 +29,14 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder(12);
     }
 
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
+@Bean
+public AuthenticationProvider authenticationProvider() {
+    return new CustomAuthenticationProvider(
+        (CustomUserDetailsService) userDetailsService, 
+        passwordEncoder(), 
+        loginAttemptService
+    );
+}
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

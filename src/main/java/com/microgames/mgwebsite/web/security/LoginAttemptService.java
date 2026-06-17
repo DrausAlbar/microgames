@@ -11,7 +11,7 @@ public class LoginAttemptService {
 
     private final LoginAttemptRepository loginAttemptRepository;
 
-    private static final int MAX_ATTEMPTS = 3   ;
+    private static final int MAX_ATTEMPTS = 3;
     private static final int LOCK_MINUTES = 15;
 
     public LoginAttemptService(LoginAttemptRepository loginAttemptRepository) {

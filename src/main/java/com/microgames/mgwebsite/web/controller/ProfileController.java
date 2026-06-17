@@ -29,7 +29,7 @@ public class ProfileController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
 
-        Userclient usuario = userRepository.findByEmail(username)
+        Userclient usuario = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado " + username));
 
         // Convertir a DTO

@@ -11,9 +11,6 @@ public class LoginAttempt {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String email;
-
-    @Column(nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false)
@@ -90,11 +87,4 @@ public class LoginAttempt {
         this.lastAttempt = LocalDateTime.now();
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }
