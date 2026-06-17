@@ -67,7 +67,7 @@ public class AuthController {
     public String home() {
         return "mgwebsite/home";
     }
-    
+
     // ==================== API PARA VALIDACIÓN AJAX ====================
     
     @GetMapping("/api/auth/check-username")
