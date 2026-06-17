@@ -6,8 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.microgames.mgwebsite.web.entities.Userclient;
 import com.microgames.mgwebsite.web.repository.UserRepository;
 import com.microgames.mgwebsite.web.dto.UserProfileDTO;
