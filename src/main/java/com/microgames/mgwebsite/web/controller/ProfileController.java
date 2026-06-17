@@ -18,8 +18,6 @@ public class ProfileController {
 
     private final UserRepository userRepository;
 
-    // Inyección por constructor (recomendado)
-    @Autowired
     public ProfileController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
