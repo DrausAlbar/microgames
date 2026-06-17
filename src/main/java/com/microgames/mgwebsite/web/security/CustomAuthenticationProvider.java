@@ -1,6 +1,5 @@
 package com.microgames.mgwebsite.web.security;
 
-import com.microgames.mgwebsite.web.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
