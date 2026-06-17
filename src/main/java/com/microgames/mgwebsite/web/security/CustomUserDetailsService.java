@@ -40,7 +40,7 @@ if (loginAttemptService.isBlocked(email)) {
         GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + usuario.getRol());
 
         return new User(
-                usuario.getEmail(),           // ← Cambiado a email
+                usuario.getUsername(),           // ← Cambiado a email
                 usuario.getPassword(),
                 usuario.isEnabled(),
                 true, true, true,
