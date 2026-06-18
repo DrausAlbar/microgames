@@ -1,181 +1,203 @@
 <!DOCTYPE html>
 <html lang="es" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - MG Web</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .status-ok {
-            color: #00ff9d;
-        }
+<head th:replace="~{fragments/fr_microgames :: head}"></head>
 
-        .status-error {
-            color: #ff4d4d;
-        }
-    </style>
 </head>
+----------------------
 
-<body class="bg-dark">
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header text-center">
-                        <h3>Crear Cuenta</h3>
+<body class="bg-dark"></body>
+USAR ESTE
+
+<div class="center">
+    <div class="panelcenter" style="padding: 50px;">
+        <div>
+            <form th:action="@{/register}" method="post">
+
+
+                <div style="padding: 10vh; width: 45vw;">
+                    <div class="center">
+                        <h1>Crear Cuenta</h1>
                     </div>
-                    <div class="card-body">
 
-                        <form id="registerForm" th:action="@{/register}" method="post">
-                            <div class="mb-3">
-                                <label class="form-label">Nombre de Usuario</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="username" name="username" required>
-                                    <button class="btn btn-outline-info" type="button" id="checkBtn">
-                                        Verificar
-                                    </button>
-                                </div>
-                                <small id="usernameStatus" class="form-text"></small>
-                            </div>
+                    <div>
+                        <br>
+                        <span id="usernameStatus"></span>
+                        <label for="username">Usuario:</label>
+                        <input class="form-control" type="text" id="username" name="username" minlength="4" maxlength="16" required>
+                        
+                    </div>
+                    <div>
+                        <br>
+                        <span id="emailStatus"></span>
+                        <label for="email">Correo electrónico:</label>
+                        <input class="form-control" type="email" id="email" name="email" required>
 
-                            <!-- Otros campos -->
-                            <div class="mb-3">
-                                <label class="form-label">Email</label>
-                                <div class="input-group">
-                                    <input type="email" class="form-control" id="email" name="email" required />
-                                    <button class="btn btn-outline-info" type="button" id="checkEmailBtn">
-                                        Verificar
-                                    </button>
-                                    </div>
-                                    <small id="emailStatus" class="form-text"></small>
-                            </div>
 
-                            <div class="mb-3">
-                                <label class="form-label">Contraseña</label>
-                                <input type="password" class="form-control" name="password" required>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary w-100" id="submitBtn" disabled>
-                                Registrarse
-                            </button>
-                        </form>
+                    </div>
+                    <div>
+                        <br>
+                        <label for="password">Contraseña:</label>
+                        <input class="form-control" type="password" id="password" name="password" minlength="8" maxlength="64"
+                            required>
+                    </div>
+                    <div>
+                        <br>
+                        <span id="passwordStatus"></span>
+                        <label for="confirmPassword">Repetir contraseña:</label>
+                        <input class="form-control" type="password" id="confirmPassword" name="confirmPassword" minlength="8" maxlength="64"
+                            required>
+                            <br>
+                    </div>
+                    
+                    <div class="center">
+                        
+                        <button type="submit" class="btn btn-primary w-100" id="submitBtn" disabled>
+                            Registrarse
+                        </button>
+                    </div>
+                    <div class="center"> <a href="/login">¿Ya tienes una cuenta? Inicia sesión</a></div>
+                    <div th:if="${error}" class="error-message">
+                        <span th:text="${error}"></span>
                     </div>
                 </div>
-            </div>
+            </form>
+
         </div>
     </div>
-    <!--Verificación de usuarios y emails-->
-    <script>
-        // === ELEMENTOS DEL FORMULARIO ===
-        const usernameInput = document.getElementById('username');
-        const checkBtn = document.getElementById('checkBtn');
-        const usernameStatus = document.getElementById('usernameStatus');
+</div>
+<script>
 
-        const emailInput = document.getElementById('email');
-        const checkEmailBtn = document.getElementById('checkEmailBtn');
-        const emailStatus = document.getElementById('emailStatus');
+let usernameValid = false;
+let emailValid = false;
+let passwordValid = false;
 
-        const submitBtn = document.getElementById('submitBtn');
+function updateSubmitButton() {
 
-        // Variables de estado
-        let usernameDisponible = false;
-        let emailDisponible = false;
+    document.getElementById("submitBtn").disabled =
+        !(usernameValid && emailValid && passwordValid);
+}
 
-        // ========================
-        // VERIFICACIÓN DE USERNAME
-        // ========================
-        checkBtn.addEventListener('click', async () => {
-            const username = usernameInput.value.trim();
+// --------------------
+// USERNAME
+// --------------------
 
-            if (username.length < 3) {
-                usernameStatus.textContent = "El nombre debe tener al menos 3 caracteres";
-                usernameStatus.className = "form-text status-error";
-                return;
-            }
+document.getElementById("username")
+.addEventListener("input", async function () {
 
-            usernameStatus.textContent = "Comprobando...";
-            usernameStatus.className = "form-text";
+    const username = this.value;
 
-            try {
-                const response = await fetch(`/api/auth/check-username?username=${encodeURIComponent(username)}`);
-                const data = await response.json();
+    usernameValid = false;
 
-                if (data.disponible) {
-                    usernameStatus.textContent = data.mensaje;
-                    usernameStatus.className = "form-text status-ok";
-                    usernameDisponible = true;
-                } else {
-                    usernameStatus.textContent = data.mensaje;
-                    usernameStatus.className = "form-text status-error";
-                    usernameDisponible = false;
-                }
+    if (!/^[A-Za-z0-9]{4,16}$/.test(username)) {
 
-                actualizarBotonSubmit();
-            } catch (error) {
-                usernameStatus.textContent = "Error al conectar con el servidor";
-                usernameStatus.className = "form-text status-error";
-            }
-        });
+        document.getElementById("usernameStatus")
+            .textContent = "✖ 4-16 caracteres alfanuméricos";
 
-        // ========================
-        // VERIFICACIÓN DE EMAIL
-        // ========================
-        checkEmailBtn.addEventListener('click', async () => {
-            const email = emailInput.value.trim();
+        updateSubmitButton();
+        return;
+    }
 
-            if (!email) {
-                emailStatus.textContent = "Por favor ingresa un email";
-                emailStatus.className = "form-text status-error";
-                return;
-            }
+    const response =
+        await fetch(`/api/register/username?username=${username}`);
 
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                emailStatus.textContent = "Por favor ingresa un email válido";
-                emailStatus.className = "form-text status-error";
-                return;
-            }
+    const available = await response.json();
 
-            emailStatus.textContent = "Comprobando...";
-            emailStatus.className = "form-text";
+    usernameValid = available;
 
-            try {
-                const response = await fetch(`/api/auth/check-email?email=${encodeURIComponent(email)}`);
-                const data = await response.json();
+    document.getElementById("usernameStatus")
+        .textContent =
+            available
+                ? "✔ Disponible"
+                : "✖ En uso";
 
-                if (data.disponible) {
-                    emailStatus.textContent = data.mensaje;
-                    emailStatus.className = "form-text status-ok";
-                    emailDisponible = true;
-                } else {
-                    emailStatus.textContent = data.mensaje;
-                    emailStatus.className = "form-text status-error";
-                    emailDisponible = false;
-                }
+    updateSubmitButton();
+});
 
-                actualizarBotonSubmit();
-            } catch (error) {
-                emailStatus.textContent = "Error al conectar con el servidor";
-                emailStatus.className = "form-text status-error";
-            }
-        });
+// --------------------
+// EMAIL
+// --------------------
 
-        // Función auxiliar para habilitar/deshabilitar el botón
-        function actualizarBotonSubmit() {
-            submitBtn.disabled = !(usernameDisponible && emailDisponible);
-        }
+document.getElementById("email")
+.addEventListener("input", async function () {
 
-        // Comprobar al perder el foco (opcional pero recomendado)
-        usernameInput.addEventListener('blur', () => {
-            if (usernameInput.value.trim().length >= 3) checkBtn.click();
-        });
+    const email = this.value;
 
-        emailInput.addEventListener('blur', () => {
-            if (emailInput.value.trim()) checkEmailBtn.click();
-        });
-    </script>
-    <!--Verificación de usuarios y emails-->
+    emailValid = false;
+
+    if (email.length < 5) {
+
+        updateSubmitButton();
+        return;
+    }
+
+    const response =
+        await fetch(`/api/register/email?email=${email}`);
+
+    const available = await response.json();
+
+    emailValid = available;
+
+    document.getElementById("emailStatus")
+        .textContent =
+            available
+                ? "✔ Disponible"
+                : "✖ Registrado";
+
+    updateSubmitButton();
+});
+
+// --------------------
+// PASSWORD
+// --------------------
+
+function validatePasswords() {
+
+    const password =
+        document.getElementById("password").value;
+
+    const confirmPassword =
+        document.getElementById("confirmPassword").value;
+
+    passwordValid = false;
+
+    if (password.length < 8 || password.length > 64) {
+
+        document.getElementById("passwordStatus")
+            .textContent =
+                "✖ Debe tener entre 8 y 64 caracteres";
+
+        updateSubmitButton();
+        return;
+    }
+
+    if (password !== confirmPassword) {
+
+        document.getElementById("passwordStatus")
+            .textContent =
+                "✖ Las contraseñas no coinciden";
+
+        updateSubmitButton();
+        return;
+    }
+
+    passwordValid = true;
+
+    document.getElementById("passwordStatus")
+        .textContent =
+            "✔ Contraseñas correctas";
+
+    updateSubmitButton();
+}
+
+document.getElementById("password")
+    .addEventListener("input", validatePasswords);
+
+document.getElementById("confirmPassword")
+    .addEventListener("input", validatePasswords);
+
+</script>
+
 </body>
 
 </html>

@@ -1,3 +1,4 @@
+/*
 package com.microgames.mgwebsite.web.dto;
 
 
@@ -74,3 +75,4 @@ public class UserProfileDTO {
     }
 }
 
+*/

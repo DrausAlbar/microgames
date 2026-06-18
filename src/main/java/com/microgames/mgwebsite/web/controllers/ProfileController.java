@@ -1,3 +1,6 @@
+/*
+
+
 package com.microgames.mgwebsite.web.controller;
 
 import org.springframework.security.core.Authentication;
@@ -6,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.microgames.mgwebsite.web.entities.Userclient;
+import com.microgames.mgwebsite.web.entities.Usermain;
 import com.microgames.mgwebsite.web.repository.UserRepository;
 import com.microgames.mgwebsite.web.dto.UserProfileDTO;
 
@@ -25,7 +28,7 @@ public class ProfileController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
 
-        Userclient usuario = userRepository.findByEmail(email)
+        Usermain usuario = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado " + email));
 
         // Convertir a DTO
@@ -42,3 +45,5 @@ public class ProfileController {
         return "mgwebsite/profile";   // Asegúrate que esta ruta de plantilla sea correcta
     }
 }
+
+*/

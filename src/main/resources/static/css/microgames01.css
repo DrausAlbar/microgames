@@ -40,17 +40,19 @@ h2 {
 
 .sandbox {
 
+
 }
 
 .box {
     display: grid;
     align-items: center;
     justify-content: center;
+    
 }
 
 .panelcenter {
     display: flex;
-    background-color: #475569;
+    background-color: #1E293B;
     border-radius: 1px;
     border-color: #475569;
     padding: 10px;
