@@ -13,20 +13,22 @@ import java.util.List;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UsermainRepository repository;
-
+        
     public CustomUserDetailsService(UsermainRepository repository) {
         this.repository = repository;
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username)
-            throws UsernameNotFoundException {
+  @Override
+public UserDetails loadUserByUsername(String login)
+        throws UsernameNotFoundException {
 
-        Usermain user = repository.findByUsernameIgnoreCase(username)
-                .orElseThrow(() ->
-                        new UsernameNotFoundException(
-                                "Usuario no encontrado - Mensaje de error s-cuds-28: " + username));
-
+    Usermain user = repository
+            .findByUsernameIgnoreCase(login)
+            .or(() -> repository.findByEmailIgnoreCase(login))
+            .orElseThrow(() ->
+                    new UsernameNotFoundException(
+                            "Usuario no encontrado - Mensaje de error s-cuds-28: "
+                                    + login));
         return new User(
                 user.getUsername(),
                 user.getPassword(),

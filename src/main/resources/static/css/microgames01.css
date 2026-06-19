@@ -53,13 +53,12 @@ h2 {
 .panelcenter {
     display: flex;
     background-color: #1E293B;
-    border-radius: 1px;
-    border-color: #475569;
+    border: 2px solid #38BDF8;
+    border-radius: 15px;
     padding: 10px;
     justify-content: center;
     align-items: center;
 
-    border-radius: 10px;
 }
 
 .right {
@@ -76,7 +75,7 @@ h2 {
     
     display: grid;
     text-align: center;
-    padding-top: 8vh;
+    padding-top: 10vh;
 }
 
 .nav-loged {

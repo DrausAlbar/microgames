@@ -22,8 +22,8 @@ public class LoginAttemptService {
 
     @Transactional
     public void loginFailed(String username) {
-//DEBUG
-    System.out.println("loginFailed ejecutado: " + username);
+
+        System.out.println("loginFailed ejecutado: " + username);
 
         if (username == null || username.isBlank()) {
             return;

@@ -55,21 +55,22 @@ public class AuthenticationHandlers
         response.sendRedirect("/home");
     }
 
-@Override
-public void onAuthenticationFailure(
-        HttpServletRequest request,
-        HttpServletResponse response,
-        AuthenticationException exception)
-        throws IOException {
-//DEBUG
-    System.out.println("LOGIN FALLIDO");
+    @Override
+    public void onAuthenticationFailure(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            AuthenticationException exception)
+            throws IOException {
 
-    String username = request.getParameter("username");
+        String login = request.getParameter("username");
 
-    System.out.println("Username recibido: " + username);
+        userRepository
+                .findByUsernameIgnoreCase(login)
+                .or(() -> userRepository.findByEmailIgnoreCase(login))
+                .ifPresent(user -> loginAttemptService.loginFailed(
+                        user.getUsername()));
 
-    loginAttemptService.loginFailed(username);
+        response.sendRedirect("/login?error");
+    }
 
-    response.sendRedirect("/login?error");
-}
 }
