@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments/fr_microgames :: head}"></head>
 <header th:replace="~{fragments/fr_microgames :: header}"></header>
@@ -40,10 +40,9 @@
                             minlength="8" maxlength="64" required>
                         <br>
                     </div>
-                    
-                    <!-- Pregunta y respuesta secreta, para recuperación de contraseña -->
+
                     <div style="padding-top: 20px; width: 30vw;">
-                        <br>
+
                         <label for="secretQuestion">Pregunta secreta:</label>
                         <input class="form-control" type="text" id="secretQuestion" name="secretQuestion"
                             placeholder="Ej: ¿Nombre de tu primera mascota?" maxlength="255" required>
@@ -55,9 +54,6 @@
                             maxlength="100" required>
                         <small>La usarás para recuperar tu contraseña si la olvidas.</small>
                     </div>
-
-
-
 
 
                     <div class="center">

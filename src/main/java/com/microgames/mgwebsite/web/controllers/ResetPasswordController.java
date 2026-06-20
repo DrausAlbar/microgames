@@ -23,16 +23,17 @@ public class ResetPasswordController {
         return "mgwebsite/reset-password";
     }
 
-    // Procesa el username, busca la pregunta secreta y muestra la pantalla 2
+    // Procesa el username + email, busca la pregunta secreta y muestra la pantalla 2
     @PostMapping("/reset-password/verify")
     public String verifyUsername(
             @RequestParam String username,
+            @RequestParam String email,
             Model model) {
 
         try {
 
             String secretQuestion =
-                    resetPasswordService.obtenerPreguntaSecreta(username);
+                    resetPasswordService.obtenerPreguntaSecreta(username, email);
 
             model.addAttribute("username", username);
             model.addAttribute("secretQuestion", secretQuestion);
@@ -65,19 +66,13 @@ public class ResetPasswordController {
 
         } catch (IllegalArgumentException ex) {
 
-            // Si se alcanzó el máximo de intentos, mandamos directo a /login
-            // con un aviso, igual que hace el BruteForceFilter del login normal.
-            if ("BLOQUEADO".equals(ex.getMessage())) {
-
-                return "redirect:/login?locked";
-            }
-
-            // Si falla por otra razón, volvemos a mostrar la pantalla 2 con el error
-            // (recuperamos la pregunta de nuevo para no perderla)
+            // Si falla, volvemos a mostrar la pantalla 2 con el error
+            // (recuperamos la pregunta de nuevo para no perderla).
+            // No volvemos a pedir el email: ya se validó en la pantalla 1.
             try {
 
                 String secretQuestion =
-                        resetPasswordService.obtenerPreguntaSecreta(username);
+                        resetPasswordService.obtenerPreguntaSecretaSinValidarEmail(username);
 
                 model.addAttribute("secretQuestion", secretQuestion);
 

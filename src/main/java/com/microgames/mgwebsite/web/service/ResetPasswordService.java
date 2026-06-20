@@ -26,36 +26,58 @@ public class ResetPasswordService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public String obtenerPreguntaSecreta(String username) {
+public String obtenerPreguntaSecreta(String username, String email) {
 
-        Usermain user = userRepository
-                .findByUsernameIgnoreCase(username)
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "Usuario no encontrado"));
+    Usermain user = userRepository
+            .findByUsernameIgnoreCase(username)
+            .orElse(null);
 
-        if (estaBloqueado(user)) {
-            throw new IllegalArgumentException(
-                    "Demasiados intentos fallidos. Inténtalo de nuevo en unos minutos.");
-        }
+    if (user == null
+            || email == null
+            || !email.trim().equalsIgnoreCase(user.getEmail())) {
 
-        if (user.getSecretQuestion() == null
-                || user.getSecretQuestion().isBlank()) {
-
-            throw new IllegalArgumentException(
-                    "Este usuario no tiene una pregunta secreta configurada");
-        }
-
-        return user.getSecretQuestion();
+        throw new IllegalArgumentException(
+                "Los datos no coinciden");
     }
 
-    /**
-     * OJO: este método YA NO es @Transactional.
-     * Cada paso (verificar y, si hace falta, guardar el fallo) hace su propio
-     * guardado inmediato con userRepository.save(), sin depender de una
-     * transacción que envuelva todo el método. Así, si más adelante lanzamos
-     * una excepción, no hay ninguna transacción activa que pueda revertir
-     * el guardado del intento fallido.
-     */
+    if (estaBloqueado(user)) {
+        throw new IllegalArgumentException(
+                "Demasiados intentos fallidos. Inténtalo de nuevo en unos minutos.");
+    }
+
+    if (user.getSecretQuestion() == null
+            || user.getSecretQuestion().isBlank()) {
+
+        throw new IllegalArgumentException(
+                "Este usuario no tiene una pregunta secreta configurada");
+    }
+
+    return user.getSecretQuestion();
+}
+
+
+public String obtenerPreguntaSecretaSinValidarEmail(String username) {
+
+    Usermain user = userRepository
+            .findByUsernameIgnoreCase(username)
+            .orElseThrow(() -> new IllegalArgumentException(
+                    "Los datos no coinciden"));
+
+    if (estaBloqueado(user)) {
+        throw new IllegalArgumentException(
+                "Demasiados intentos fallidos. Inténtalo de nuevo en unos minutos.");
+    }
+
+    if (user.getSecretQuestion() == null
+            || user.getSecretQuestion().isBlank()) {
+
+        throw new IllegalArgumentException(
+                "Este usuario no tiene una pregunta secreta configurada");
+    }
+
+    return user.getSecretQuestion();
+}
+
     public void confirmarReseteo(
             String username,
             String secretAnswer,

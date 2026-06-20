@@ -1,37 +1,86 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
-<meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- <link rel="icon" href="favicon.ico" type="image/x-icon"> -->
-
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<!-- Pagina de perfil del usuario -->
 <head th:replace="~{fragments/fr_microgames :: head}"></head>
-
+<header th:replace="~{fragments/fr_microgames ::header}"></header>
 <body>
-    <div class="perfil-container">
-        <h1>Mi Perfil</h1>
+<div class="sanbox">
+<div th:replace="~{fragments/fr_microgames :: nav-loged}"> </div>
+</div>
+<div class="center" style="padding: 3vh;">
+<div class="panelcenter" style="padding: 3vw;">
 
+<h1 class="center">Mi Perfil</h1>
 
+<!-- Vista normal: solo lectura -->
+<div id="vistaPerfil">
 
-        <a href="/home" class="btn">Volver al Inicio</a>
+    <p><strong>Usuario:</strong> <span th:text="${profileForm.username}"></span></p>
+    <p><strong>Email:</strong> <span th:text="${profileForm.email}"></span></p>
+    <p><strong>Nombre:</strong> <span th:text="${profileForm.firstName}"></span></p>
+    <p><strong>Apellido:</strong> <span th:text="${profileForm.lastName}"></span></p>
 
-
-
-        <form th:action="@{/logout}" method="post" style="display: inline;">
-            <button type="submit" class="btn btn-logout">Cerrar Sesión</button>
-        </form>
-
+    <div class="center" style="padding-top: 20px;">
+        <button type="button" class="btn btn-primary w-100" id="btnEditar">
+            Editar Datos
+        </button>
     </div>
 
+</div>
 
-    <div class="perfil-info">
-        <p><strong>Usuario:</strong> <span th:text="${profile.username}"></span></p>
-        <p><strong>Email:</strong> <span th:text="${profile.email}"></span></p>
-        <p><strong>Nombre:</strong> <span th:text="${profile.firstname}"></span></p>
-        <p><strong>Apellido:</strong> <span th:text="${profile.lastname}"></span></p>
-        <p><strong>Rol:</strong> <span th:text="${profile.rol}"></span></p>
-    </div>
+<!-- Formulario de edición: oculto hasta que se pulse "Editar Datos" -->
+<div id="formularioPerfil" style="display: none;">
 
+    <hr>
+
+    <form th:action="@{/profile}" th:object="${profileForm}" method="post">
+
+        <div style="padding-top: 20px; width: 30vw;">
+            <label for="firstName">Nombre:</label>
+            <input class="form-control" type="text" id="firstName" th:field="*{firstName}" maxlength="16">
+        </div>
+
+        <div style="padding-top: 20px; width: 30vw;">
+            <label for="lastName">Apellido:</label>
+            <input class="form-control" type="text" id="lastName" th:field="*{lastName}" maxlength="16">
+        </div>
+
+        <div class="center" style="padding-top: 20px;">
+            <button type="submit" class="btn btn-primary w-100">
+                Guardar Cambios
+            </button>
+        </div>
+
+        <div class="center" style="padding-top: 10px;">
+            <button type="button" class="btn btn-secondary w-100" id="btnCancelar">
+                Cancelar
+            </button>
+        </div>
+
+    </form>
+
+</div>
+
+</div>
+</div>
+
+<script>
+    document.getElementById("btnEditar")
+        .addEventListener("click", function () {
+
+            document.getElementById("vistaPerfil").style.display = "none";
+            document.getElementById("formularioPerfil").style.display = "block";
+        });
+
+    document.getElementById("btnCancelar")
+        .addEventListener("click", function () {
+
+            document.getElementById("formularioPerfil").style.display = "none";
+            document.getElementById("vistaPerfil").style.display = "block";
+        });
+</script>
 
 </body>
-
+<footer th:replace="~{fragments/fr_microgames ::footer}"></footer>
 </html>
