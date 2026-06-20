@@ -1,0 +1,75 @@
+1. Profesional (Corporativa)
+
+Ideal para aplicaciones web, paneles de control y servicios.
+
+Uso	Color
+Fondo	#F8FAFC
+Paneles	#FFFFFF
+Principal	#2563EB
+Secundario	#64748B
+Texto	#1E293B
+
+Sensación: confianza, limpieza y profesionalidad.
+
+2. Oscura Moderna
+
+Ideal para dashboards, herramientas tecnológicas y gaming.
+
+Uso	Color
+Fondo	#0F172A
+Paneles	#1E293B
+links	#38BDF8
+boredes	#475569
+Texto	#F8FAFC
+
+Sensación: tecnología, elegancia y modernidad.
+
+3. Natural
+
+Ideal para sostenibilidad, ciencia, agricultura o bienestar.
+
+Uso	Color
+Fondo	#F5F5F4
+Paneles	#FFFFFF
+Principal	#16A34A
+Secundario	#84CC16
+Texto	#1C1917
+
+Sensación: naturaleza, crecimiento y equilibrio.
+
+4. Cálida y Amigable
+
+Ideal para comunidades, blogs o proyectos educativos.
+
+Uso	Color
+Fondo	#FFF7ED
+Paneles	#FFFFFF
+Principal	#EA580C
+Secundario	#F59E0B
+Texto	#292524
+
+Sensación: cercanía, energía y optimismo.
+
+5. Futurista
+
+Ideal para videojuegos, IA, espacio y tecnología avanzada.
+
+Uso	Color
+Fondo	#050816
+Paneles	#111827
+Principal	#00D4FF
+Secundario	#7C3AED
+Texto	#E5E7EB
+
+Sensación: innovación, ciencia ficción y alta tecnología.
+
+Mi recomendación para tu juego espacial
+
+Por lo que hemos hablado (Java, Spring Boot, Thymeleaf, comercio espacial, minería e industria), usaría:
+
+Fondo: #050816
+Paneles: #111827
+Bordes y botones: #00D4FF
+Indicadores positivos: #10B981
+Alertas: #F59E0B
+Texto: #E5E7EB
