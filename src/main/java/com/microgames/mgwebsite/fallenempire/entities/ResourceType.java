@@ -18,20 +18,21 @@ public class ResourceType {
     @Column(nullable = false, length = 50)
     private String name;
 
-    // 0 = flujo instantáneo (Energía, Agua, Puntos...)
-    // 1 = Menas, Minerales, Gases base, Orgánicos
-    // 2 = Refinados (Metales, Químicos, Alimentos...)
-    // 3 = Industriales (Materiales, Componentes...)
-    // 4 = Comerciales (Piezas de naves, productos de lujo...)
-    @Column(nullable = false)
-    private int tier;
+    // La etapa de producción de este recurso (ej: "Refinados")
+    @ManyToOne
+    @JoinColumn(name = "tier_id", nullable = false)
+    private ResourceTier tier;
 
-    // La categoría específica de este recurso (ej: "Químicos").
-    // Si necesitas la categoría padre (ej: "Orgánicos"), se obtiene
-    // con resourceType.getCategory().getParent()
+    // La categoría de este recurso (ej: "Químicos").
+    // No tiene jerarquía: es una simple etiqueta de tipo de material.
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private ResourceCategory category;
+
+    // Qué tan común es este recurso en el mapa (Alta, Media, Baja).
+    // Solo aplica a recursos extraídos directamente (tiers iniciales); el resto puede dejarse null.
+    @Column(length = 20)
+    private String abundance;
 
     // Descripción opcional para mostrar al jugador
     @Column(length = 255)
@@ -64,11 +65,11 @@ public class ResourceType {
         this.name = name;
     }
 
-    public int getTier() {
+    public ResourceTier getTier() {
         return tier;
     }
 
-    public void setTier(int tier) {
+    public void setTier(ResourceTier tier) {
         this.tier = tier;
     }
 
@@ -78,6 +79,14 @@ public class ResourceType {
 
     public void setCategory(ResourceCategory category) {
         this.category = category;
+    }
+
+    public String getAbundance() {
+        return abundance;
+    }
+
+    public void setAbundance(String abundance) {
+        this.abundance = abundance;
     }
 
     public String getDescription() {

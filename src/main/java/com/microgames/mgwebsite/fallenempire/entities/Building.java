@@ -1,25 +1,28 @@
+//Paquete del juego Fallen Empire.
 package com.microgames.mgwebsite.fallenempire.entities;
 
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "fallenempire_resource_category")
-public class ResourceCategory {
+@Table(name = "fallenempire_building")
+public class Building {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Nombre técnico único (ej: "ORGANICOS", "QUIMICOS")
+    // Nombre técnico único (ej: "MINAS", "REFINERIA_METALURGICA")
     @Column(nullable = false, unique = true, length = 50)
     private String code;
 
-    // Nombre visible al jugador (ej: "Orgánicos")
-    @Column(nullable = false, length = 50)
+    // Nombre visible al jugador (ej: "Refinería Metalúrgica")
+    @Column(nullable = false, length = 100)
     private String name;
 
-    public ResourceCategory() {
+    public Building() {
     }
+
+    // Getters y Setters
 
     public Long getId() {
         return id;

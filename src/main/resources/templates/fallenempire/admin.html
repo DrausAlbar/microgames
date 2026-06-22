@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/fr_fallenempire :: head}"></head>
+
+<body>
+<div class="container" style="padding-top: 3vh; padding-bottom: 5vh;">
+
+    <h1>Admin temporal - Recursos Fallen Empire</h1>
+    <p>Esta página es solo para cargar datos a mano mientras se construye el juego.</p>
+
+    <hr>
+
+    <!-- ==================== TIER ==================== -->
+    <h3>1. Tiers (etapas de producción)</h3>
+
+    <form th:action="@{/fallenempire/admin/tier}" th:object="${tierForm}" method="post" class="row g-2 align-items-end">
+
+        <div class="col-auto">
+            <label>Código</label>
+            <input class="form-control" type="text" th:field="*{code}" placeholder="REFINADOS" required>
+        </div>
+
+        <div class="col-auto">
+            <label>Nombre</label>
+            <input class="form-control" type="text" th:field="*{name}" placeholder="Refinados" required>
+        </div>
+
+        <div class="col-auto">
+            <label>Orden</label>
+            <input class="form-control" type="number" th:field="*{orderIndex}" placeholder="2" required>
+        </div>
+
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Crear tier</button>
+        </div>
+
+    </form>
+
+    <table class="table table-sm" style="margin-top: 15px;">
+        <thead>
+            <tr><th>Id</th><th>Código</th><th>Nombre</th><th>Orden</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="tier : ${tiers}">
+                <td th:text="${tier.id}"></td>
+                <td th:text="${tier.code}"></td>
+                <td th:text="${tier.name}"></td>
+                <td th:text="${tier.orderIndex}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <!-- ==================== CATEGORÍA ==================== -->
+    <h3>2. Categorías</h3>
+
+    <form th:action="@{/fallenempire/admin/category}" th:object="${categoryForm}" method="post" class="row g-2 align-items-end">
+
+        <div class="col-auto">
+            <label>Código</label>
+            <input class="form-control" type="text" th:field="*{code}" placeholder="METALES" required>
+        </div>
+
+        <div class="col-auto">
+            <label>Nombre</label>
+            <input class="form-control" type="text" th:field="*{name}" placeholder="Metales" required>
+        </div>
+
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Crear categoría</button>
+        </div>
+
+    </form>
+
+    <table class="table table-sm" style="margin-top: 15px;">
+        <thead>
+            <tr><th>Id</th><th>Código</th><th>Nombre</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="category : ${categories}">
+                <td th:text="${category.id}"></td>
+                <td th:text="${category.code}"></td>
+                <td th:text="${category.name}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <!-- ==================== EDIFICIO ==================== -->
+    <h3>3. Edificios</h3>
+
+    <form th:action="@{/fallenempire/admin/building}" th:object="${buildingForm}" method="post" class="row g-2 align-items-end">
+
+        <div class="col-auto">
+            <label>Código</label>
+            <input class="form-control" type="text" th:field="*{code}" placeholder="REFINERIA_METALURGICA" required>
+        </div>
+
+        <div class="col-auto">
+            <label>Nombre</label>
+            <input class="form-control" type="text" th:field="*{name}" placeholder="Refinería Metalúrgica" required>
+        </div>
+
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Crear edificio</button>
+        </div>
+
+    </form>
+
+    <table class="table table-sm" style="margin-top: 15px;">
+        <thead>
+            <tr><th>Id</th><th>Código</th><th>Nombre</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="building : ${buildings}">
+                <td th:text="${building.id}"></td>
+                <td th:text="${building.code}"></td>
+                <td th:text="${building.name}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <!-- ==================== RECURSO ==================== -->
+    <h3>4. Recursos</h3>
+
+    <form th:action="@{/fallenempire/admin/resource}" th:object="${resourceTypeForm}" method="post" class="row g-2 align-items-end">
+
+        <div class="col-auto">
+            <label>Código</label>
+            <input class="form-control" type="text" th:field="*{code}" placeholder="ACERO" required>
+        </div>
+
+        <div class="col-auto">
+            <label>Nombre</label>
+            <input class="form-control" type="text" th:field="*{name}" placeholder="Acero" required>
+        </div>
+
+        <div class="col-auto">
+            <label>Tier</label>
+            <select class="form-control" th:field="*{tierId}" required>
+                <option value="">-- elegir --</option>
+                <option th:each="tier : ${tiers}" th:value="${tier.id}" th:text="${tier.name}"></option>
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <label>Categoría</label>
+            <select class="form-control" th:field="*{categoryId}" required>
+                <option value="">-- elegir --</option>
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <label>Abundancia</label>
+            <select class="form-control" th:field="*{abundance}">
+                <option value="">-- ninguna --</option>
+                <option value="Alta">Alta</option>
+                <option value="Media">Media</option>
+                <option value="Baja">Baja</option>
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <label>Descripción</label>
+            <input class="form-control" type="text" th:field="*{description}" placeholder="opcional">
+        </div>
+
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Crear recurso</button>
+        </div>
+
+    </form>
+
+    <table class="table table-sm" style="margin-top: 15px;">
+        <thead>
+            <tr><th>Id</th><th>Código</th><th>Nombre</th><th>Tier</th><th>Categoría</th><th>Abundancia</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="resource : ${resources}">
+                <td th:text="${resource.id}"></td>
+                <td th:text="${resource.code}"></td>
+                <td th:text="${resource.name}"></td>
+                <td th:text="${resource.tier.name}"></td>
+                <td th:text="${resource.category.name}"></td>
+                <td th:text="${resource.abundance}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <!-- ==================== RECETA ==================== -->
+    <h3>5. Recetas</h3>
+    <p>Una receta dice qué edificio produce qué recurso. Los ingredientes se añaden después, en la sección 6.</p>
+
+    <form th:action="@{/fallenempire/admin/recipe}" th:object="${recipeForm}" method="post" class="row g-2 align-items-end">
+
+        <div class="col-auto">
+            <label>Edificio</label>
+            <select class="form-control" th:field="*{buildingId}" required>
+                <option value="">-- elegir --</option>
+                <option th:each="building : ${buildings}" th:value="${building.id}" th:text="${building.name}"></option>
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <label>Recurso resultado</label>
+            <select class="form-control" th:field="*{outputResourceId}" required>
+                <option value="">-- elegir --</option>
+                <option th:each="resource : ${resources}" th:value="${resource.id}" th:text="${resource.name}"></option>
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Crear receta</button>
+        </div>
+
+    </form>
+
+    <table class="table table-sm" style="margin-top: 15px;">
+        <thead>
+            <tr><th>Id</th><th>Edificio</th><th>Recurso resultado</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="recipe : ${recipes}">
+                <td th:text="${recipe.id}"></td>
+                <td th:text="${recipe.building.name}"></td>
+                <td th:text="${recipe.outputResource.name}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <!-- ==================== INGREDIENTE DE RECETA ==================== -->
+    <h3>6. Ingredientes de cada receta</h3>
+    <p>Repite este formulario una vez por cada ingrediente que necesite la receta (ej: Acero = Hematita + Grafito son dos envíos).</p>
+
+    <form th:action="@{/fallenempire/admin/recipe-ingredient}" th:object="${recipeIngredientForm}" method="post" class="row g-2 align-items-end">
+
+        <div class="col-auto">
+            <label>Receta</label>
+            <select class="form-control" th:field="*{recipeId}" required>
+                <option value="">-- elegir --</option>
+                <option th:each="recipe : ${recipes}" th:value="${recipe.id}"
+                        th:text="${recipe.outputResource.name} + ' (' + ${recipe.building.name} + ')'"></option>
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <label>Recurso ingrediente</label>
+            <select class="form-control" th:field="*{resourceId}" required>
+                <option value="">-- elegir --</option>
+                <option th:each="resource : ${resources}" th:value="${resource.id}" th:text="${resource.name}"></option>
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <label>Cantidad</label>
+            <input class="form-control" type="number" th:field="*{quantity}" min="1" required>
+        </div>
+
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Añadir ingrediente</button>
+        </div>
+
+    </form>
+
+    <table class="table table-sm" style="margin-top: 15px;">
+        <thead>
+            <tr><th>Id</th><th>Receta (recurso producido)</th><th>Ingrediente</th><th>Cantidad</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="ingredient : ${recipeIngredients}">
+                <td th:text="${ingredient.id}"></td>
+                <td th:text="${ingredient.recipe.outputResource.name}"></td>
+                <td th:text="${ingredient.resource.name}"></td>
+                <td th:text="${ingredient.quantity}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>
